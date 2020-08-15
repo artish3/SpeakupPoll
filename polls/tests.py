@@ -78,7 +78,17 @@ class QuestionIndexViewTests(TestCase):
             response.context['latest_question_list'],
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
         )
-
+    def test_two_duplicate_questions(self):
+        """
+            Testing whether duplicte exists
+        """
+        create_question(question_text="Past question 1.", days=-30)
+        create_question(question_text="Past question 1.", days=-30)
+        response = self.client.get(reverse('polls:index'))
+        self.assertQuerysetEqual(
+            response.context['latest_question_list'],
+            ['<Question: Past question 1.>']
+        )
 
 
 class QuestionDetailViewTests(TestCase):
